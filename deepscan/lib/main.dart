@@ -4,9 +4,10 @@ import '../screens/images.dart';
 Color azulDestaque = const Color.fromARGB(255, 31, 12, 67);
 Color fundo = const Color.fromARGB(255, 238, 237, 242);
 Color azulCinza = const Color.fromARGB(255, 207, 213, 225);
+Color vermelho = const Color.fromARGB(255, 232, 50, 49);
 
 void main() {
-  runApp(MaterialApp(home: TelaImagem()));
+  runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {
@@ -14,8 +15,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(body: Center(child: Text('Hello World!'))),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: TelaImagem(), // Aqui vai a sua tela
     );
   }
 }

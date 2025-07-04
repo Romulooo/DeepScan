@@ -9,7 +9,11 @@ class BottomBar extends StatelessWidget {
       destinations: [
         IconButton(
           onPressed: () => {},
-          icon: Icon(Icons.text_fields, color: azulDestaque, size: 50),
+          icon: Icon(
+            Icons.text_snippet_outlined,
+            color: azulDestaque,
+            size: 50,
+          ),
         ),
         IconButton(
           onPressed: () => {},
