@@ -9,8 +9,8 @@ Future<List> verificarImagem(imagem) async {
   final url1 = Uri.https('api.sightengine.com', '/1.0/check.json', {
     'url': imagem,
     'models': 'genai',
-    'api_user': '77467266',
-    'api_secret': 'xyq2G35dvnwEBm3RHZjjtLjGCKbbX5uf',
+    'api_user': '<user>',
+    'api_secret': '<password>',
   });
 
   try {
