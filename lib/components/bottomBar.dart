@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:deepscan/main.dart';
+import '../screens/text.dart';
+import '../screens/images.dart';
 
 class BottomBar extends StatelessWidget {
   const BottomBar({super.key});
@@ -12,12 +14,12 @@ class BottomBar extends StatelessWidget {
           icon: Icon(
             Icons.text_snippet_outlined,
             color: azulDestaque,
-            size: 50,
+            size: 30,
           ),
         ),
         IconButton(
           onPressed: () => {},
-          icon: Icon(Icons.image, color: azulDestaque, size: 50),
+          icon: Icon(Icons.image, color: azulDestaque, size: 30),
         ),
       ],
       backgroundColor: azulCinza,

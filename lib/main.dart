@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../screens/images.dart';
+import '../screens/text.dart';
 
 Color azulDestaque = const Color.fromARGB(255, 31, 12, 67);
 Color fundo = const Color.fromARGB(255, 238, 237, 242);
