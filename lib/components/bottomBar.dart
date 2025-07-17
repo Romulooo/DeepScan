@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:deepscan/main.dart';
+import '../screens/text.dart';
+import '../screens/images.dart';
+
+String tela = "image";
 
 class BottomBar extends StatelessWidget {
   const BottomBar({super.key});
@@ -8,16 +12,34 @@ class BottomBar extends StatelessWidget {
     return NavigationBar(
       destinations: [
         IconButton(
-          onPressed: () => {},
+          onPressed:
+              () => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TelaTexto()),
+                ),
+                tela = "text",
+              },
           icon: Icon(
-            Icons.text_snippet_outlined,
+            tela == "image" ? Icons.text_snippet_outlined : Icons.text_snippet,
             color: azulDestaque,
-            size: 50,
+            size: 30,
           ),
         ),
         IconButton(
-          onPressed: () => {},
-          icon: Icon(Icons.image, color: azulDestaque, size: 50),
+          onPressed:
+              () => {
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => TelaImagem()),
+                  (Route route) => false,
+                ),
+                tela = "image",
+              },
+          icon: Icon(
+            tela == "image" ? Icons.image : Icons.image_outlined,
+            color: azulDestaque,
+            size: 30,
+          ),
         ),
       ],
       backgroundColor: azulCinza,

@@ -6,12 +6,13 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       backgroundColor: azulDestaque,
       title: Text(
         "DeepScan",
         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
-      actions: [Image.asset('images/Logo.jpg')],
+      actions: [Image.asset('assets/images/Logo.jpg')],
     );
   }
 
