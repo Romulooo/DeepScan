@@ -23,6 +23,9 @@ import 'package:file_picker/file_picker.dart'; //<- Tentarei usar outro
 //fudeu
 import 'package:permission_handler/permission_handler.dart';
 
+// Loader
+import 'package:loader_overlay/loader_overlay.dart';
+
 void main() {
   runApp(const TelaImagem());
 }
@@ -203,6 +206,7 @@ class _TelaImagemState extends State<TelaImagem> {
                   ),
                   child: ElevatedButton(
                     onPressed: () async {
+                      context.loaderOverlay.show();
                       late final result;
                       _textFieldFocusNode.unfocus();
                       if (_controllerUrl.text.isNotEmpty && _arquivo == false) {
@@ -212,6 +216,7 @@ class _TelaImagemState extends State<TelaImagem> {
                       } else {
                         result = ["Erro"];
                       }
+                      context.loaderOverlay.hide();
                       if (result.toString() == "[Erro]") {
                         showPopupCard(
                           context: context,

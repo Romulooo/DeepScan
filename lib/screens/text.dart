@@ -16,6 +16,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 // Importando o pacote de indicador de porcentagem
 import 'package:percent_indicator/percent_indicator.dart';
 
+// Loader
+import 'package:loader_overlay/loader_overlay.dart';
+
 void main() {
   runApp(const TelaTexto());
 }
@@ -119,9 +122,11 @@ class _TelaTextoState extends State<TelaTexto> {
                     onPressed: () async {
                       _textFieldFocusNode.unfocus();
                       if (_controllerTexto.text.isNotEmpty) {
+                        context.loaderOverlay.show();
                         final result = await verificarTexto(
                           _controllerTexto.text,
                         );
+                        context.loaderOverlay.hide();
 
                         showPopupCard(
                           context: context,
