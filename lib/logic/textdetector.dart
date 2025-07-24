@@ -9,10 +9,7 @@ Future<double> verificarTexto(texto) async {
   final response = await http.post(
     url,
     headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({
-      'key': 'H6LPTMDFMS9KH2NBBYXL8PAL1TDJM5AK',
-      'text': texto,
-    }),
+    body: jsonEncode({'key': '<key>', 'text': texto}),
   );
 
   if (response.statusCode >= 200 && response.statusCode < 300) {

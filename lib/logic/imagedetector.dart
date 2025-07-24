@@ -14,8 +14,8 @@ Future<List> verificarImagemURL(imagem) async {
   final url1 = Uri.https('api.sightengine.com', '/1.0/check.json', {
     'url': imagem,
     'models': 'genai',
-    'api_user': '1339326965',
-    'api_secret': 'DJtqiybxU42bZpVtrY6yvTQENAAnVZTx',
+    'api_user': '<user>',
+    'api_secret': '<key>',
   });
 
   try {
@@ -41,8 +41,8 @@ Future<List> verificarImagemURL(imagem) async {
   final url2 = Uri.https('api.sightengine.com', '/1.0/check.json', {
     'url': imagem,
     'models': 'deepfake',
-    'api_user': '1339326965',
-    'api_secret': 'DJtqiybxU42bZpVtrY6yvTQENAAnVZTx',
+    'api_user': '<user>',
+    'api_secret': '<key>',
   });
 
   try {
@@ -82,10 +82,8 @@ Future<List> verificarImagemArquivo(PlatformFile imagem) async {
   final request1 =
       http.MultipartRequest('POST', uri1)
         ..fields['models'] = 'genai'
-        ..fields['api_user'] =
-            '1339326965' //77467266
-        ..fields['api_secret'] =
-            'DJtqiybxU42bZpVtrY6yvTQENAAnVZTx' //xyq2G35dvnwEBm3RHZjjtLjGCKbbX5uf
+        ..fields['api_user'] = '<user>'
+        ..fields['api_secret'] = '<key>'
         ..files.add(
           http.MultipartFile.fromBytes(
             'media',
@@ -108,8 +106,8 @@ Future<List> verificarImagemArquivo(PlatformFile imagem) async {
   final request2 =
       http.MultipartRequest('POST', uri1)
         ..fields['models'] = 'deepfake'
-        ..fields['api_user'] = '1339326965'
-        ..fields['api_secret'] = 'DJtqiybxU42bZpVtrY6yvTQENAAnVZTx'
+        ..fields['api_user'] = '<user>'
+        ..fields['api_secret'] = '<key>'
         ..files.add(
           http.MultipartFile.fromBytes(
             'media',
