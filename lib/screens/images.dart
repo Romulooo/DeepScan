@@ -214,7 +214,15 @@ class _TelaImagemState extends State<TelaImagem> {
                       } else if (_selectedFile != null && _arquivo == true) {
                         result = await verificarImagemArquivo(_selectedFile!);
                       } else {
-                        result = ["Erro"];
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("Insira uma imagem para verificar."),
+                            duration: Duration(seconds: 2),
+                            dismissDirection: DismissDirection.down,
+                          ),
+                        );
+                        //result = ["Erro"];
                       }
                       context.loaderOverlay.hide();
                       if (result.toString() == "[Erro]") {
@@ -339,6 +347,8 @@ class _TelaImagemState extends State<TelaImagem> {
                                             percent: deepfakeDouble,
                                             backgroundColor: azulCinza,
                                             progressColor: deepfakeColor,
+                                            animation: true,
+                                            animationDuration: 750,
                                           ),
                                           Text(
                                             deepfake.length == 1
@@ -374,6 +384,8 @@ class _TelaImagemState extends State<TelaImagem> {
                                             percent: aiGeneratedDouble,
                                             backgroundColor: azulCinza,
                                             progressColor: aiGeneratedColor,
+                                            animation: true,
+                                            animationDuration: 750,
                                           ),
 
                                           Text(
@@ -454,28 +466,48 @@ class _TelaImagemState extends State<TelaImagem> {
                           (aiGeneratedDouble * 100),
                           (deepfakeDouble * 100),
                         );
-                        if (deepfakeDouble > 0.4 && deepfakeDouble < 0.75) {
-                          setState(() {
-                            deepfakeColor = Colors.orange;
-                          });
-                        } else if (deepfakeDouble <= 0.4) {
+                        if (deepfakeDouble <= 0.25) {
                           setState(() {
                             deepfakeColor = Colors.green;
+                          });
+                        } else if (deepfakeDouble > 0.25 &&
+                            deepfakeDouble <= 0.50) {
+                          setState(() {
+                            deepfakeColor = const Color.fromARGB(
+                              255,
+                              215,
+                              187,
+                              45,
+                            );
+                          });
+                        } else if (deepfakeDouble > 0.50 &&
+                            deepfakeDouble <= 0.75) {
+                          setState(() {
+                            deepfakeColor = Colors.orange;
                           });
                         } else {
                           setState(() {
                             deepfakeColor = vermelho;
                           });
                         }
-
-                        if (aiGeneratedDouble > 0.4 &&
-                            aiGeneratedDouble < 0.75) {
-                          setState(() {
-                            aiGeneratedColor = Colors.orange;
-                          });
-                        } else if (aiGeneratedDouble <= 0.4) {
+                        if (aiGeneratedDouble <= 0.25) {
                           setState(() {
                             aiGeneratedColor = Colors.green;
+                          });
+                        } else if (aiGeneratedDouble > 0.25 &&
+                            aiGeneratedDouble <= 0.50) {
+                          setState(() {
+                            aiGeneratedColor = const Color.fromARGB(
+                              255,
+                              215,
+                              187,
+                              45,
+                            );
+                          });
+                        } else if (aiGeneratedDouble > 0.50 &&
+                            aiGeneratedDouble <= 0.75) {
+                          setState(() {
+                            aiGeneratedColor = Colors.orange;
                           });
                         } else {
                           setState(() {

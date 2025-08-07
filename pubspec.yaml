@@ -74,6 +74,7 @@ flutter:
 
   assets:
     - assets/images/Logo.jpg
+    - assets/images/Logo.png
     - assets/images/Ai.svg
     - assets/images/Deepfake.svg
 

@@ -6,16 +6,18 @@ import 'package:file_picker/file_picker.dart';
 import 'package:http_parser/http_parser.dart';
 import 'dart:typed_data';
 
+String key = "DJtqiybxU42bZpVtrY6yvTQENAAnVZTx";
+String user = "1339326965";
+
 Future<List> verificarImagemURL(imagem) async {
   String deepfake;
   String ia;
-  //return (["99.0001", "67.99999"]);
 
   final url1 = Uri.https('api.sightengine.com', '/1.0/check.json', {
     'url': imagem,
     'models': 'genai',
-    'api_user': '<user>',
-    'api_secret': '<key>',
+    'api_user': user,
+    'api_secret': key,
   });
 
   try {
@@ -41,8 +43,8 @@ Future<List> verificarImagemURL(imagem) async {
   final url2 = Uri.https('api.sightengine.com', '/1.0/check.json', {
     'url': imagem,
     'models': 'deepfake',
-    'api_user': '<user>',
-    'api_secret': '<key>',
+    'api_user': user,
+    'api_secret': key,
   });
 
   try {
@@ -82,8 +84,8 @@ Future<List> verificarImagemArquivo(PlatformFile imagem) async {
   final request1 =
       http.MultipartRequest('POST', uri1)
         ..fields['models'] = 'genai'
-        ..fields['api_user'] = '<user>'
-        ..fields['api_secret'] = '<key>'
+        ..fields['api_user'] = user
+        ..fields['api_secret'] = key
         ..files.add(
           http.MultipartFile.fromBytes(
             'media',
@@ -106,8 +108,8 @@ Future<List> verificarImagemArquivo(PlatformFile imagem) async {
   final request2 =
       http.MultipartRequest('POST', uri1)
         ..fields['models'] = 'deepfake'
-        ..fields['api_user'] = '<user>'
-        ..fields['api_secret'] = '<key>'
+        ..fields['api_user'] = user
+        ..fields['api_secret'] = key
         ..files.add(
           http.MultipartFile.fromBytes(
             'media',

@@ -77,7 +77,7 @@ class _TelaTextoState extends State<TelaTexto> {
                     focusNode: _textFieldFocusNode,
                     minLines: 1,
                     maxLines: 20,
-                    maxLength: 200,
+                    maxLength: 300,
                     controller: _controllerTexto,
                     decoration: InputDecoration(
                       labelStyle: TextStyle(
@@ -97,6 +97,28 @@ class _TelaTextoState extends State<TelaTexto> {
                       ),
                       focusColor: azulDestaque,
                       hoverColor: azulDestaque,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 150,
+                child: ElevatedButtonTheme(
+                  data: ElevatedButtonThemeData(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueGrey,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _controllerTexto.text = "";
+                    },
+                    child: Text(
+                      "Limpar Texto",
+                      style: TextStyle(color: fundo, fontSize: 14),
                     ),
                   ),
                 ),
@@ -170,6 +192,8 @@ class _TelaTextoState extends State<TelaTexto> {
                                             percent: aiWrittenDouble,
                                             backgroundColor: azulCinza,
                                             progressColor: aiWrittenColor,
+                                            animation: true,
+                                            animationDuration: 750,
                                           ),
 
                                           Text(
@@ -246,19 +270,40 @@ class _TelaTextoState extends State<TelaTexto> {
                         infoText = await porcentagemTexto(
                           aiWrittenDouble * 100,
                         );
-                        if (aiWrittenDouble > 0.4 && aiWrittenDouble < 0.75) {
-                          setState(() {
-                            aiWrittenColor = Colors.orange;
-                          });
-                        } else if (aiWrittenDouble <= 0.4) {
+                        if (aiWrittenDouble <= 0.25) {
                           setState(() {
                             aiWrittenColor = Colors.green;
+                          });
+                        } else if (aiWrittenDouble > 0.25 &&
+                            aiWrittenDouble <= 0.50) {
+                          setState(() {
+                            aiWrittenColor = const Color.fromARGB(
+                              255,
+                              215,
+                              187,
+                              45,
+                            );
+                            ;
+                          });
+                        } else if (aiWrittenDouble > 0.50 &&
+                            aiWrittenDouble <= 0.75) {
+                          setState(() {
+                            aiWrittenColor = Colors.orange;
                           });
                         } else {
                           setState(() {
                             aiWrittenColor = vermelho;
                           });
                         }
+                      } else {
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("Insira um texto para verificar."),
+                            duration: Duration(seconds: 2),
+                            dismissDirection: DismissDirection.down,
+                          ),
+                        );
                       }
                     },
                     child: Text(
@@ -270,6 +315,7 @@ class _TelaTextoState extends State<TelaTexto> {
               ),
             ],
           ),
+          SizedBox(height: 50),
         ],
       ),
       bottomNavigationBar: BottomBar(),

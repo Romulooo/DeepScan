@@ -2,6 +2,8 @@ import 'dart:convert';
 //import 'dart:ffi';
 import 'package:http/http.dart' as http;
 
+String key = "0MPZ3GUM2XLKAKQW04QCOJ22YLQ2L9OF";
+
 Future<double> verificarTexto(texto) async {
   //return 0.99 * 100;
   final url = Uri.parse('https://api.sapling.ai/api/v1/aidetect');
@@ -9,7 +11,7 @@ Future<double> verificarTexto(texto) async {
   final response = await http.post(
     url,
     headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({'key': '<key>', 'text': texto}),
+    body: jsonEncode({'key': key, 'text': texto}),
   );
 
   if (response.statusCode >= 200 && response.statusCode < 300) {

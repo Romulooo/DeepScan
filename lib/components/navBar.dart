@@ -12,7 +12,13 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
         "DeepScan",
         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
-      actions: [Image.asset('assets/images/Logo.jpg')],
+      actions: [
+        SizedBox(
+          height: 50,
+          width: 75,
+          child: Image.asset('assets/images/Logo.png'),
+        ),
+      ],
     );
   }
 
