@@ -623,11 +623,24 @@ class _TelaImagemState extends State<TelaImagem> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: 300,
-              width: 200,
-              child: CameraPreview(cameraController!),
+              height: 250,
+
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CameraPreview(cameraController!),
+                  fotoFile != null && fotoFile!.bytes != null
+                      ? Image.memory(
+                        fotoFile!.bytes!,
+                        fit: BoxFit.cover,
+                        height: 250,
+                      )
+                      : SizedBox(),
+                ],
+              ),
             ),
             IconButton(
+              color: Colors.blueGrey,
               onPressed: () async {
                 XFile foto = await cameraController!.takePicture();
 
@@ -635,15 +648,17 @@ class _TelaImagemState extends State<TelaImagem> {
                 Uint8List bytes = await foto.readAsBytes();
 
                 // Constrói um PlatformFile
-                fotoFile = PlatformFile(
-                  name: foto.name,
-                  size: bytes.length,
-                  bytes: bytes,
-                  path: foto.path,
-                );
+                setState(() {
+                  fotoFile = PlatformFile(
+                    name: foto.name,
+                    size: bytes.length,
+                    bytes: bytes,
+                    path: foto.path,
+                  );
+                });
               },
               icon: Icon(Icons.camera),
-              iconSize: 50,
+              iconSize: 40,
             ),
           ],
         ),
