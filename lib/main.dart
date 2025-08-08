@@ -9,7 +9,7 @@ Color fundo = const Color.fromARGB(255, 238, 237, 242);
 Color azulCinza = const Color.fromARGB(255, 207, 213, 225);
 Color vermelho = const Color.fromARGB(255, 232, 50, 49);
 
-void main() {
+void main() async {
   runApp(const MainApp());
 }
 

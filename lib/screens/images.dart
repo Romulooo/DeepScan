@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 import '../logic/imagedetector.dart';
@@ -18,7 +19,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 // Importando o pacote de seleção de arquivos
-import 'package:file_picker/file_picker.dart'; //<- Tentarei usar outro
+import 'package:file_picker/file_picker.dart';
 
 //fudeu
 import 'package:permission_handler/permission_handler.dart';
@@ -26,7 +27,18 @@ import 'package:permission_handler/permission_handler.dart';
 // Loader
 import 'package:loader_overlay/loader_overlay.dart';
 
-void main() {
+//Camera
+import 'package:camera/camera.dart';
+
+//Converter arquivos XFile
+import 'dart:typed_data';
+
+//late List<CameraDescription> _cameras;
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  //_cameras = await availableCameras();
   runApp(const TelaImagem());
 }
 
@@ -38,7 +50,16 @@ class TelaImagem extends StatefulWidget {
 }
 
 class _TelaImagemState extends State<TelaImagem> {
-  bool _arquivo = false;
+  List<CameraDescription> cameras = [];
+  CameraController? cameraController;
+
+  @override
+  void initState() {
+    super.initState();
+    _setupCameraController();
+  }
+
+  int tipoVerifica = 0; // 0 = URL, 1 = Arquivo, 2 = Câmera
   String aiGenerated = "AI Generated";
   String deepfake = "Deepfake";
   double aiGeneratedDouble = 0;
@@ -52,6 +73,7 @@ class _TelaImagemState extends State<TelaImagem> {
   final FocusNode _textFieldFocusNode = FocusNode();
 
   PlatformFile? _selectedFile;
+  PlatformFile? fotoFile;
 
   Future<void> _selecionarArquivo() async {
     //Permissão
@@ -76,6 +98,31 @@ class _TelaImagemState extends State<TelaImagem> {
     }
   }
 
+  // Código usado para a câmear abaixo
+  /*late CameraController _controllerCamera;
+
+  @override
+  void initState() {
+    initCamera();
+    super.initState();
+  }
+
+  initCamera() {
+    _controllerCamera = CameraController(_cameras[0], ResolutionPreset.max);
+    _controllerCamera.initialize().then((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _controllerCamera.dispose();
+    super.dispose();
+  }*/
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,12 +138,15 @@ class _TelaImagemState extends State<TelaImagem> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                _arquivo ? Icons.file_copy : Icons.link,
+                tipoVerifica == 0
+                    ? Icons.link
+                    : (tipoVerifica == 1 ? Icons.file_copy : Icons.camera_alt),
                 color: azulDestaque,
                 size: 100,
               ),
+
               Text(
-                "Verificar \n imagem por \n ${_arquivo ? "Arquivo" : "URL "}",
+                "Verificar \n imagem por \n ${tipoVerifica == 0 ? "URL" : (tipoVerifica == 1 ? "Arquivo" : "Câmera")}",
                 style: TextStyle(
                   color: azulDestaque,
                   fontSize: 24,
@@ -106,7 +156,7 @@ class _TelaImagemState extends State<TelaImagem> {
             ],
           ),
 
-          _arquivo
+          tipoVerifica == 1
               ? Column(
                 children: [
                   SizedBox(height: 100),
@@ -148,46 +198,48 @@ class _TelaImagemState extends State<TelaImagem> {
                     ),
                 ],
               )
-              : Center(
-                child: Column(
-                  children: [
-                    SizedBox(height: 119),
-                    SizedBox(
-                      width: 300,
-                      child: TextSelectionTheme(
-                        data: TextSelectionThemeData(
-                          selectionColor: azulDestaque.withOpacity(0.2),
-                          cursorColor: azulDestaque,
-                          selectionHandleColor: azulDestaque,
-                        ),
-                        child: TextField(
-                          focusNode: _textFieldFocusNode,
-                          controller: _controllerUrl,
-                          decoration: InputDecoration(
-                            labelStyle: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
+              : (tipoVerifica == 0
+                  ? Center(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 119),
+                        SizedBox(
+                          width: 300,
+                          child: TextSelectionTheme(
+                            data: TextSelectionThemeData(
+                              selectionColor: azulDestaque.withOpacity(0.2),
+                              cursorColor: azulDestaque,
+                              selectionHandleColor: azulDestaque,
                             ),
-                            floatingLabelStyle: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
+                            child: TextField(
+                              focusNode: _textFieldFocusNode,
+                              controller: _controllerUrl,
+                              decoration: InputDecoration(
+                                labelStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                floatingLabelStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                label: Text("URL da Imagem"),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: azulCinza),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: azulDestaque),
+                                ),
+                                focusColor: azulDestaque,
+                                hoverColor: azulDestaque,
+                              ),
                             ),
-                            label: Text("URL da Imagem"),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: azulCinza),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: azulDestaque),
-                            ),
-                            focusColor: azulDestaque,
-                            hoverColor: azulDestaque,
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                  )
+                  : _buildUI()),
           SizedBox(height: 20),
 
           Column(
@@ -209,10 +261,12 @@ class _TelaImagemState extends State<TelaImagem> {
                       context.loaderOverlay.show();
                       late final result;
                       _textFieldFocusNode.unfocus();
-                      if (_controllerUrl.text.isNotEmpty && _arquivo == false) {
+                      if (_controllerUrl.text.isNotEmpty && tipoVerifica == 0) {
                         result = await verificarImagemURL(_controllerUrl.text);
-                      } else if (_selectedFile != null && _arquivo == true) {
+                      } else if (_selectedFile != null && tipoVerifica == 1) {
                         result = await verificarImagemArquivo(_selectedFile!);
+                      } else if (tipoVerifica == 2) {
+                        result = await verificarImagemArquivo(fotoFile!);
                       } else {
                         ScaffoldMessenger.of(context).clearSnackBars();
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -523,32 +577,14 @@ class _TelaImagemState extends State<TelaImagem> {
                   ),
                 ),
               ),
-              /*SizedBox(height: 40),
-              Align(
-                alignment: FractionalOffset.bottomCenter,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 10,
-                  children: [
-                    Text(
-                      "Verificar por arquivo",
-                      style: TextStyle(color: Colors.black, fontSize: 14),
-                    ),
-                    Switch(
-                      activeColor: azulDestaque,
-                      value: _arquivo,
-                      onChanged: (value) {
-                        setState(() {
-                          _arquivo = value;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),*/
+
               SizedBox(height: 50),
               ToggleButtons(
-                isSelected: [_arquivo == false, _arquivo == true],
+                isSelected: [
+                  tipoVerifica == 0,
+                  tipoVerifica == 1,
+                  tipoVerifica == 2,
+                ],
                 selectedColor: azulDestaque,
                 selectedBorderColor: azulCinza,
                 focusColor: azulDestaque,
@@ -557,10 +593,14 @@ class _TelaImagemState extends State<TelaImagem> {
                 splashColor: const Color.fromARGB(30, 31, 12, 67),
                 onPressed: (index) {
                   setState(() {
-                    _arquivo = index == 1;
+                    tipoVerifica = index;
                   });
                 },
-                children: [Icon(Icons.link), Icon(Icons.file_copy)],
+                children: [
+                  Icon(Icons.link),
+                  Icon(Icons.file_copy),
+                  Icon(Icons.camera_alt),
+                ],
               ),
             ],
           ),
@@ -568,33 +608,62 @@ class _TelaImagemState extends State<TelaImagem> {
       ),
 
       bottomNavigationBar: BottomBar(),
+    );
+  }
 
-      /*bottomSheet: Container(
-        color: fundo,
+  Widget _buildUI() {
+    if (cameraController == null ||
+        cameraController?.value.isInitialized == false) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    return SafeArea(
+      child: SizedBox(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          verticalDirection: VerticalDirection.up, // <- inverte o sentido
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 50),
-            ToggleButtons(
-              isSelected: [_arquivo == false, _arquivo == true],
-              selectedColor: azulDestaque,
-              selectedBorderColor: azulCinza,
-              focusColor: azulDestaque,
-              highlightColor: azulCinza,
-              fillColor: azulCinza,
-              splashColor: const Color.fromARGB(30, 31, 12, 67),
-              onPressed: (index) {
-                setState(() {
-                  _arquivo = index == 1;
-                });
+            SizedBox(
+              height: 300,
+              width: 200,
+              child: CameraPreview(cameraController!),
+            ),
+            IconButton(
+              onPressed: () async {
+                XFile foto = await cameraController!.takePicture();
+
+                // Lê os bytes da foto
+                Uint8List bytes = await foto.readAsBytes();
+
+                // Constrói um PlatformFile
+                fotoFile = PlatformFile(
+                  name: foto.name,
+                  size: bytes.length,
+                  bytes: bytes,
+                  path: foto.path,
+                );
               },
-              children: [Icon(Icons.link), Icon(Icons.file_copy)],
+              icon: Icon(Icons.camera),
+              iconSize: 50,
             ),
           ],
         ),
-      ),*/
+      ),
     );
+  }
+
+  Future<void> _setupCameraController() async {
+    List<CameraDescription> _cameras = await availableCameras();
+    if (_cameras.isNotEmpty) {
+      setState(() {
+        cameras = _cameras;
+        cameraController = CameraController(
+          _cameras.first,
+          ResolutionPreset.high,
+        );
+      });
+      cameraController?.initialize().then((_) {
+        setState(() {});
+      });
+    }
   }
 }
