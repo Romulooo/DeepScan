@@ -1,16 +1,3 @@
-# deepscan
+# DeepScan
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+DeepScan é um aplicativo que busca facilitar a indentificação de conteúdos gerados por inteligência artificial, podendo analisar textos e imagens em busca de traços que evidenciem seu uso. A ferramenta pode verificar tanto arquivos de imagens locais quanto endereços URLs externos para a presença do uso de inteligência artificial ou _deepfakes_, além de conter uma câmera no aplicativo que permite a verificação rápida com o simples toque de um botão.
