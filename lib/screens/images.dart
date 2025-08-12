@@ -137,22 +137,28 @@ class _TelaImagemState extends State<TelaImagem> {
             spacing: 10,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                tipoVerifica == 0
-                    ? Icons.link
-                    : (tipoVerifica == 1 ? Icons.file_copy : Icons.camera_alt),
-                color: azulDestaque,
-                size: 100,
-              ),
+              tipoVerifica != 2
+                  ? Icon(
+                    tipoVerifica == 0
+                        ? Icons.link
+                        : (tipoVerifica == 1
+                            ? Icons.file_copy
+                            : Icons.camera_alt),
+                    color: azulDestaque,
+                    size: 100,
+                  )
+                  : SizedBox(),
 
-              Text(
-                "Verificar \n imagem por \n ${tipoVerifica == 0 ? "URL" : (tipoVerifica == 1 ? "Arquivo" : "Câmera")}",
-                style: TextStyle(
-                  color: azulDestaque,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              tipoVerifica != 2
+                  ? Text(
+                    "Verificar \n imagem por \n ${tipoVerifica == 0 ? "URL" : (tipoVerifica == 1 ? "Arquivo" : "Câmera")}",
+                    style: TextStyle(
+                      color: azulDestaque,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
+                  : SizedBox(),
             ],
           ),
 
@@ -639,6 +645,7 @@ class _TelaImagemState extends State<TelaImagem> {
                 ],
               ),
             ),
+            SizedBox(height: 20),
             IconButton(
               color: Colors.blueGrey,
               onPressed: () async {
