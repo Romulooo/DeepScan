@@ -1,6 +1,6 @@
 # 🤖 DeepScan 
 
-DeepScan é um aplicativo desenvolvido com o intuito de facilitar a indentificação de conteúdos gerados por inteligência artificial, podendo analisar textos e imagens em busca de traços que evidenciem seu uso. A ferramenta permite verificar tanto arquivos de imagens locais quanto endereços URLs externos, além de detectar possíveis _deepfakes_. O app também conta com uma câmera integrada, que permite a verificação rápida com o simples toque de um botão.
+DeepScan é um aplicativo desenvolvido com o intuito de facilitar a indentificação de conteúdos gerados por inteligência artificial, podendo analisar textos e imagens em busca de traços que evidenciem seu uso. A ferramenta permite verificar tanto arquivos de imagens locais quanto endereços URLs externos, além de detectar possíveis _deepfakes_. O app também permite o uso da câmera do seu dispositivo, que permite a verificação rápida com o simples toque de um botão.
 
 ## 🗒️ Do que o DeepScan é capaz
 
@@ -10,7 +10,7 @@ O aplicativo processa o material e apresenta ao usuário a probabilidade - em po
 
 ## 🖥️ Como executar
 
-Para rodar DeepScan em seu computador ou dispositivo móvel, você precisa do Flutter na versão correta e deve instalar todas as bibliotecas necessárias:
+Para rodar DeepScan em seu computador ou dispositivo móvel, você precisa do Flutter na versão correta e deve instalar todas as bibliotecas necessárias depois de clonar o respositório:
 ```
 flutter pub get
 ```
