@@ -1,4 +1,3 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 import '../logic/imagedetector.dart';
@@ -98,41 +97,34 @@ class _TelaImagemState extends State<TelaImagem> {
     }
   }
 
-  // Código usado para a câmear abaixo
-  /*late CameraController _controllerCamera;
-
-  @override
-  void initState() {
-    initCamera();
-    super.initState();
-  }
-
-  initCamera() {
-    _controllerCamera = CameraController(_cameras[0], ResolutionPreset.max);
-    _controllerCamera.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    });
-  }
-
-  @override
-  void dispose() {
-    _controllerCamera.dispose();
-    super.dispose();
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomSheet: ToggleButtons(
+        isSelected: [tipoVerifica == 0, tipoVerifica == 1, tipoVerifica == 2],
+        selectedColor: azulDestaque,
+        selectedBorderColor: azulCinza,
+        focusColor: azulDestaque,
+        highlightColor: azulCinza,
+        fillColor: azulCinza,
+        splashColor: const Color.fromARGB(30, 31, 12, 67),
+        onPressed: (index) {
+          setState(() {
+            tipoVerifica = index;
+          });
+        },
+        children: [
+          Icon(Icons.link),
+          Icon(Icons.file_copy),
+          Icon(Icons.camera_alt),
+        ],
+      ),
+
       backgroundColor: fundo,
       appBar: NavBar(),
       body: ListView(
         children: [
-          SizedBox(height: 40),
-
-          SizedBox(height: 40),
+          SizedBox(height: 80),
           Row(
             spacing: 10,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -585,29 +577,6 @@ class _TelaImagemState extends State<TelaImagem> {
               ),
 
               SizedBox(height: 50),
-              ToggleButtons(
-                isSelected: [
-                  tipoVerifica == 0,
-                  tipoVerifica == 1,
-                  tipoVerifica == 2,
-                ],
-                selectedColor: azulDestaque,
-                selectedBorderColor: azulCinza,
-                focusColor: azulDestaque,
-                highlightColor: azulCinza,
-                fillColor: azulCinza,
-                splashColor: const Color.fromARGB(30, 31, 12, 67),
-                onPressed: (index) {
-                  setState(() {
-                    tipoVerifica = index;
-                  });
-                },
-                children: [
-                  Icon(Icons.link),
-                  Icon(Icons.file_copy),
-                  Icon(Icons.camera_alt),
-                ],
-              ),
             ],
           ),
         ],
@@ -635,6 +604,7 @@ class _TelaImagemState extends State<TelaImagem> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CameraPreview(cameraController!),
+                  SizedBox(width: 20),
                   fotoFile != null && fotoFile!.bytes != null
                       ? Image.memory(
                         fotoFile!.bytes!,

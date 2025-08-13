@@ -1,15 +1,45 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
-import 'package:path/path.dart' as path;
 
 import 'package:file_picker/file_picker.dart';
 import 'package:http_parser/http_parser.dart';
-import 'dart:typed_data';
 
+import 'package:crypto/crypto.dart';
+
+// Aqui vai a chave e o usuário da API Sightengine
 String key = "DJtqiybxU42bZpVtrY6yvTQENAAnVZTx";
 String user = "1339326965";
 
 Future<List> verificarImagemURL(imagem) async {
+  /*final hash = md5.convert(utf8.encode(imagem));
+  String hashStr = hash.toString();
+  
+  try {
+    final url = Uri.parse('http://10.0.31.101:5000/consultarimagem/$hashStr');
+
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      if (data is Map &&
+          data.containsKey('encontrado') &&
+          data['encontrado'] == false) {
+        print('Imagem não encontrada.');
+      } else {
+        print('Resultado encontrado: $data');
+        return ([data['ai'], data['deep']]);
+      }
+    } else {
+      print('Erro na requisição. Código HTTP: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Erro ao consultar imagem: $e');
+  }*/
+
+  //Faz a requisição para a api
+
   String deepfake;
   String ia;
 
@@ -28,15 +58,12 @@ Future<List> verificarImagemURL(imagem) async {
       if (output["status"] == "failure") {
         return ['Erro'];
       }
-      print(output);
+
       ia = (output['type']['ai_generated'] * 100).toString();
     } else {
-      print('Erro: ${response.statusCode}');
-      print(response.body);
       return ['Erro'];
     }
   } catch (e) {
-    print('Erro na requisição: $e');
     return ['Erro'];
   }
 
@@ -55,20 +82,23 @@ Future<List> verificarImagemURL(imagem) async {
       if (output["status"] == "failure") {
         return ['Erro'];
       }
-      print("-------------------------------");
-      print(output["status"]);
       deepfake = (output['type']['deepfake'] * 100).toString();
     } else {
-      print('Erro: ${response.statusCode}');
-      print(response.body);
       return ['Erro'];
     }
   } catch (e) {
-    print('Erro na requisição: $e');
     return ['Erro'];
   }
 
-  print("IA: " + ia + "     DeepFake: " + deepfake);
+  //Antes de retornar adiciona no banco de dados
+  /*
+  final url = Uri.parse('http://127.0.0.1:5000/adicionarimagem');
+  final response = await http.post(
+    url,
+    headers: {'content-type': 'application/json'},
+    body: jsonEncode({"hash": hashStr, "ia": ia, "deep": deepfake}),
+  );
+*/
   return ([ia, deepfake]);
 }
 
@@ -94,12 +124,12 @@ Future<List> verificarImagemArquivo(PlatformFile imagem) async {
             contentType: MediaType('image', 'jpg'),
           ),
         );
-  final response1 = await request1.send();
+  final responseIA = await request1.send();
 
-  if (response1.statusCode == 200) {
-    final responseData1 = await response1.stream.bytesToString();
+  if (responseIA.statusCode == 200) {
+    final responseData1 = await responseIA.stream.bytesToString();
     final output1 = json.decode(responseData1);
-    print(output1);
+
     ia = (output1['type']['ai_generated'] * 100).toString();
   } else {
     return ['Erro'];
@@ -118,16 +148,16 @@ Future<List> verificarImagemArquivo(PlatformFile imagem) async {
             contentType: MediaType('image', 'jpg'),
           ),
         );
-  final response2 = await request2.send();
+  final responseDeepFake = await request2.send();
 
-  if (response2.statusCode == 200) {
-    final responseData2 = await response2.stream.bytesToString();
+  if (responseDeepFake.statusCode == 200) {
+    final responseData2 = await responseDeepFake.stream.bytesToString();
     final output2 = json.decode(responseData2);
-    print(output2);
+
     deepfake = (output2['type']['deepfake'] * 100).toString();
   } else {
     return ['Erro'];
   }
-  print(ia + " " + deepfake);
+
   return ([ia, deepfake]);
 }

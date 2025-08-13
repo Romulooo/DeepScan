@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../screens/images.dart';
-import '../screens/text.dart';
 
 import 'package:loader_overlay/loader_overlay.dart';
 
