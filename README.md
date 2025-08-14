@@ -1,6 +1,6 @@
 # 🤖 DeepScan 
 
-DeepScan é um aplicativo desenvolvido com o intuito de facilitar a indentificação de conteúdos gerados por inteligência artificial, podendo analisar textos e imagens em busca de traços que evidenciem seu uso. A ferramenta permite verificar tanto arquivos de imagens locais quanto endereços URLs externos, além de detectar possíveis _deepfakes_. O app também permite o uso da câmera do seu dispositivo, que permite a verificação rápida com o simples toque de um botão.
+DeepScan é um aplicativo desenvolvido com o intuito de facilitar a identificação de conteúdos gerados por inteligência artificial, podendo analisar textos e imagens em busca de traços que evidenciem seu uso. A ferramenta permite verificar tanto arquivos de imagens locais quanto endereços URLs externos, além de detectar possíveis _deepfakes_. O app também permite o uso da câmera do seu dispositivo, que permite a verificação rápida com o simples toque de um botão.
 
 ## 🗒️ Do que o DeepScan é capaz
 
