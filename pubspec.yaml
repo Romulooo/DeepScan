@@ -47,6 +47,8 @@ dependencies:
 
   crypto: ^3.0.6
 
+  flutter_native_splash:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -106,3 +108,17 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_native_splash:
+  color: '#1f0c43'
+  image: assets/images/Logo.png
+  android: true
+  ios: true
+  web: false
+
+  android_12:
+    color: '#1f0c43'
+    image: assets/images/Logo.png
+    android: true
+    ios: true
+    web: false

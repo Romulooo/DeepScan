@@ -105,6 +105,7 @@ class _TelaImagemState extends State<TelaImagem> {
         selectedColor: azulDestaque,
         selectedBorderColor: azulCinza,
         focusColor: azulDestaque,
+
         highlightColor: azulCinza,
         fillColor: azulCinza,
         splashColor: const Color.fromARGB(30, 31, 12, 67),
@@ -604,7 +605,11 @@ class _TelaImagemState extends State<TelaImagem> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CameraPreview(cameraController!),
-                  SizedBox(width: 20),
+
+                  fotoFile != null && fotoFile!.bytes != null
+                      ? SizedBox(width: 20)
+                      : SizedBox(),
+
                   fotoFile != null && fotoFile!.bytes != null
                       ? Image.memory(
                         fotoFile!.bytes!,
