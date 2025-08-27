@@ -321,6 +321,7 @@ class _TelaImagemState extends State<TelaImagem> {
                                         "Talvez o link esteja incorreto ou a imagem esteja fora do ar.",
                                       ),
                                       SizedBox(height: 60),
+                                      Spacer(),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -467,6 +468,7 @@ class _TelaImagemState extends State<TelaImagem> {
                                         "Os resultados não são 100% precisos e devem ser usados como referência, não como confirmação definitiva.",
                                       ),
                                       SizedBox(height: 30),
+                                      Spacer(),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,

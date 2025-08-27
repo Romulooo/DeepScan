@@ -221,7 +221,7 @@ class _TelaTextoState extends State<TelaTexto> {
                                         "Os resultados não são 100% precisos e devem ser usados como referência, não como confirmação definitiva.",
                                       ),
                                       SizedBox(height: 100),
-
+                                      Spacer(),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
