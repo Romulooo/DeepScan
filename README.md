@@ -70,3 +70,12 @@ Já para a verificação de texto, é utilizada a API _Sapling's API_ que calcul
 ```
 
 Para utilizar o DeepScan é necessário uma chave de cada uma das APIs que deve ser inserida nos arquivos _imagedetector.dart_ e _textdetector.dart_.
+
+
+## 💾 Banco de Dados
+Para rodar o banco de dados, acesse o arquivo _app.py_ e execute o seguinte comando:
+```
+py .\app.py
+```
+
+Por fim, no arquivo _imagedetector.dart_ substitua o host _urlapi_ pelo host atual.
