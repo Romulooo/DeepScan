@@ -10,109 +10,87 @@ import 'package:crypto/crypto.dart';
 // Aqui vai a chave e o usuário da API Sightengine
 String key = "<key>";
 String user = "<user>";
+String urlapi = 'http://10.0.31.101:5000';
 
-Future<List> verificarImagemURL(imagem) async {
-  /*final hash = md5.convert(utf8.encode(imagem));
-  String hashStr = hash.toString();
+Future<List<String>> verificarImagemURL(String imagemUrl) async {
+  final normalized = imagemUrl.trim();
+  final hashStr = md5.convert(utf8.encode(normalized)).toString();
 
   try {
-    final url = Uri.parse('http://10.0.31.101:5000/consultarimagem/$hashStr');
+    final uriConsulta = Uri.parse('$urlapi/consultarimagem/$hashStr');
+    final resConsulta = await http.get(uriConsulta);
 
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-
+    if (resConsulta.statusCode == 200) {
+      final data = jsonDecode(resConsulta.body);
       if (data is Map &&
-          data.containsKey('encontrado') &&
-          data['encontrado'] == false) {
-        print('Imagem não encontrada.');
-      } else {
-        print('Resultado encontrado: $data');
-        return ([data['ai'], data['deep']]);
+          data['encontrado'] == true &&
+          data.containsKey('ai') &&
+          data.containsKey('deep')) {
+        return [data['ai'].toString(), data['deep'].toString()];
       }
-    } else {
-      print('Erro na requisição. Código HTTP: ${response.statusCode}');
     }
-  } catch (e) {
-    print('Erro ao consultar imagem: $e');
-  }*/
+  } catch (_) {
+    print("Erro");
+  }
 
-  //Faz a requisição para a api
-
-  String deepfake;
   String ia;
+  String deepfake;
 
-  final url1 = Uri.https('api.sightengine.com', '/1.0/check.json', {
-    'url': imagem,
+  final uriGenAI = Uri.https('api.sightengine.com', '/1.0/check.json', {
+    'url': normalized,
     'models': 'genai',
     'api_user': user,
     'api_secret': key,
   });
 
   try {
-    final response = await http.get(url1);
-
-    if (response.statusCode == 200) {
-      final output = jsonDecode(response.body);
-      if (output["status"] == "failure") {
-        return ['Erro'];
-      }
-
-      ia = (output['type']['ai_generated'] * 100).toString();
-    } else {
-      return ['Erro'];
-    }
-  } catch (e) {
+    final resGen = await http.get(uriGenAI);
+    if (resGen.statusCode != 200) return ['Erro'];
+    final output = jsonDecode(resGen.body);
+    if (output['status'] == 'failure') return ['Erro'];
+    ia = ((output['type']?['ai_generated'] ?? 0) * 100).toString();
+  } catch (_) {
     return ['Erro'];
   }
 
-  final url2 = Uri.https('api.sightengine.com', '/1.0/check.json', {
-    'url': imagem,
+  final uriDeep = Uri.https('api.sightengine.com', '/1.0/check.json', {
+    'url': normalized,
     'models': 'deepfake',
     'api_user': user,
     'api_secret': key,
   });
 
   try {
-    final response = await http.get(url2);
-
-    if (response.statusCode == 200) {
-      final output = jsonDecode(response.body);
-      if (output["status"] == "failure") {
-        return ['Erro'];
-      }
-      deepfake = (output['type']['deepfake'] * 100).toString();
-    } else {
-      return ['Erro'];
-    }
-  } catch (e) {
+    final resDeep = await http.get(uriDeep);
+    if (resDeep.statusCode != 200) return ['Erro'];
+    final output = jsonDecode(resDeep.body);
+    if (output['status'] == 'failure') return ['Erro'];
+    deepfake = ((output['type']?['deepfake'] ?? 0) * 100).toString();
+  } catch (_) {
     return ['Erro'];
   }
 
-  //Antes de retornar adiciona no banco de dados
-  /*
-  final url = Uri.parse('http://127.0.0.1:5000/adicionarimagem');
-  final response = await http.post(
-    url,
-    headers: {'content-type': 'application/json'},
-    body: jsonEncode({"hash": hashStr, "ia": ia, "deep": deepfake}),
-  );
-*/
-  return ([ia, deepfake]);
+  try {
+    final uriAdd = Uri.parse('$urlapi/adicionarimagem');
+    await http.post(
+      uriAdd,
+      headers: {'content-type': 'application/json'},
+      body: jsonEncode({"hash": hashStr, "ia": ia, "deep": deepfake}),
+    );
+  } catch (_) {}
+
+  return [ia, deepfake];
 }
 
-Future<List> verificarImagemArquivo(PlatformFile imagem) async {
-  String deepfake;
+Future<List<String>> verificarImagemArquivo(PlatformFile imagem) async {
+  if (imagem.bytes == null) return ['Erro'];
+
   String ia;
+  String deepfake;
+  final uri = Uri.parse('https://api.sightengine.com/1.0/check.json');
 
-  final uri1 = Uri.parse('https://api.sightengine.com/1.0/check.json');
-
-  if (imagem.bytes == null) {
-    return ['Erro'];
-  }
-  final request1 =
-      http.MultipartRequest('POST', uri1)
+  final reqGen =
+      http.MultipartRequest('POST', uri)
         ..fields['models'] = 'genai'
         ..fields['api_user'] = user
         ..fields['api_secret'] = key
@@ -121,22 +99,19 @@ Future<List> verificarImagemArquivo(PlatformFile imagem) async {
             'media',
             imagem.bytes!,
             filename: imagem.name,
-            contentType: MediaType('image', 'jpg'),
+            contentType: MediaType('image', 'jpeg'),
           ),
         );
-  final responseIA = await request1.send();
 
-  if (responseIA.statusCode == 200) {
-    final responseData1 = await responseIA.stream.bytesToString();
-    final output1 = json.decode(responseData1);
+  final resGen = await reqGen.send();
+  if (resGen.statusCode != 200) return ['Erro'];
+  final bodyGen = await resGen.stream.bytesToString();
+  final outGen = json.decode(bodyGen);
+  if (outGen['status'] == 'failure') return ['Erro'];
+  ia = ((outGen['type']?['ai_generated'] ?? 0) * 100).toString();
 
-    ia = (output1['type']['ai_generated'] * 100).toString();
-  } else {
-    return ['Erro'];
-  }
-
-  final request2 =
-      http.MultipartRequest('POST', uri1)
+  final reqDeep =
+      http.MultipartRequest('POST', uri)
         ..fields['models'] = 'deepfake'
         ..fields['api_user'] = user
         ..fields['api_secret'] = key
@@ -145,19 +120,16 @@ Future<List> verificarImagemArquivo(PlatformFile imagem) async {
             'media',
             imagem.bytes!,
             filename: imagem.name,
-            contentType: MediaType('image', 'jpg'),
+            contentType: MediaType('image', 'jpeg'),
           ),
         );
-  final responseDeepFake = await request2.send();
 
-  if (responseDeepFake.statusCode == 200) {
-    final responseData2 = await responseDeepFake.stream.bytesToString();
-    final output2 = json.decode(responseData2);
+  final resDeep = await reqDeep.send();
+  if (resDeep.statusCode != 200) return ['Erro'];
+  final bodyDeep = await resDeep.stream.bytesToString();
+  final outDeep = json.decode(bodyDeep);
+  if (outDeep['status'] == 'failure') return ['Erro'];
+  deepfake = ((outDeep['type']?['deepfake'] ?? 0) * 100).toString();
 
-    deepfake = (output2['type']['deepfake'] * 100).toString();
-  } else {
-    return ['Erro'];
-  }
-
-  return ([ia, deepfake]);
+  return [ia, deepfake];
 }

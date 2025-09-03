@@ -5,7 +5,6 @@ import requests
 app = Flask(__name__)
 
 try:
-    #documentação do psycopg2 ver como faz
     conn = psycopg2.connect('dbname=deepscan user=postgres password=3f@db host=164.90.152.205 port=80') #padrão 5432, 80 não bloqueia aqui
     print("Conexão com o banco de dados local estabelecida com sucesso")
 except Exception as e:
@@ -14,10 +13,12 @@ except Exception as e:
 
 @app.route("/consultarimagem/<hash>", methods=["GET"])
 def consultar_imagem(hash):
+    print('chegou')
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM imagens WHERE hash = %s", (hash,))
-
+    print('achou')
     resultado = cursor.fetchone()
+    print(resultado)
     if resultado:
         print(resultado)
         resultado_map = {
@@ -26,8 +27,9 @@ def consultar_imagem(hash):
             'ai': resultado[2],
             'deep': resultado[3]
         }
+        print(resultado_map)
         return jsonify(resultado_map)
-    
+    print('retornou false')
     return jsonify({'encontrado': False})
 
 @app.route("/adicionarimagem", methods=["POST"])
