@@ -8,8 +8,8 @@ import 'package:http_parser/http_parser.dart';
 import 'package:crypto/crypto.dart';
 
 // Aqui vai a chave e o usuário da API Sightengine
-String key = "XgXpwoZfXPkA8xuhzsYpn4vLJELYLVZB";
-String user = "217008696";
+String key = "<key>";
+String user = "<user>";
 String urlapi = 'http://10.0.31.101:5000';
 
 Future<List<String>> verificarImagemURL(String imagemUrl) async {
