@@ -5,34 +5,14 @@ import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
 import 'package:http_parser/http_parser.dart';
 
-import 'package:crypto/crypto.dart';
+import './keys.dart';
 
 // Aqui vai a chave e o usuário da API Sightengine
-String key = "<key>";
-String user = "<user>";
-String urlapi = 'http://10.0.31.101:5000';
+String key = imageKey;
+String user = imageUser;
 
 Future<List<String>> verificarImagemURL(String imagemUrl) async {
   final normalized = imagemUrl.trim();
-  final hashStr = md5.convert(utf8.encode(normalized)).toString();
-
-  try {
-    final uriConsulta = Uri.parse('$urlapi/consultarimagem/$hashStr');
-    final resConsulta = await http.get(uriConsulta);
-
-    if (resConsulta.statusCode == 200) {
-      final data = jsonDecode(resConsulta.body);
-      if (data is Map &&
-          data['encontrado'] == true &&
-          data.containsKey('ai') &&
-          data.containsKey('deep')) {
-        return [data['ai'].toString(), data['deep'].toString()];
-      }
-    }
-  } catch (_) {
-    print("Erro");
-  }
-
   String ia;
   String deepfake;
 
@@ -69,15 +49,6 @@ Future<List<String>> verificarImagemURL(String imagemUrl) async {
   } catch (_) {
     return ['Erro'];
   }
-
-  try {
-    final uriAdd = Uri.parse('$urlapi/adicionarimagem');
-    await http.post(
-      uriAdd,
-      headers: {'content-type': 'application/json'},
-      body: jsonEncode({"hash": hashStr, "ia": ia, "deep": deepfake}),
-    );
-  } catch (_) {}
 
   return [ia, deepfake];
 }

@@ -20,24 +20,21 @@ import 'package:percent_indicator/percent_indicator.dart';
 // Importando o pacote de seleção de arquivos
 import 'package:file_picker/file_picker.dart';
 
-//fudeu
+// Importando o pacote de permissões do dispositivo
 import 'package:permission_handler/permission_handler.dart';
 
 // Loader
 import 'package:loader_overlay/loader_overlay.dart';
 
-//Camera
+// Camera
 import 'package:camera/camera.dart';
 
-//Converter arquivos XFile
+// Converter arquivos XFile
 import 'dart:typed_data';
-
-//late List<CameraDescription> _cameras;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  //_cameras = await availableCameras();
   runApp(const TelaImagem());
 }
 
@@ -275,7 +272,6 @@ class _TelaImagemState extends State<TelaImagem> {
                             dismissDirection: DismissDirection.down,
                           ),
                         );
-                        //result = ["Erro"];
                       }
                       context.loaderOverlay.hide();
                       if (result.toString() == "[Erro]") {
