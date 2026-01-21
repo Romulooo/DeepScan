@@ -69,5 +69,5 @@ Já para a verificação de texto, é utilizada a API _Sapling's API_ que calcul
 }
 ```
 
-Para utilizar o DeepScan é necessário uma chave de cada uma das APIs que deve ser inserida nos arquivos _imagedetector.dart_ e _textdetector.dart_.
+Para utilizar o DeepScan é necessário uma chave de cada uma das APIs que deve ser inserida no arquivo _keys.dart_.
 
